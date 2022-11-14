@@ -1,4 +1,4 @@
-module github.com/DrFaust92/bitbucket-go-client
+module github.com/strollby/bitbucket-go-client
 
 go 1.18
 
