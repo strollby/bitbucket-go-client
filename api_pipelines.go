@@ -1696,6 +1696,8 @@ func (a *PipelinesApiService) GetDeploymentVariables(ctx context.Context, worksp
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
+	// Patched to support 100 variables by default: Resolves pagination issue
+	localVarQueryParams.Set("pagelen", "100")		
 	localVarFormParams := url.Values{}
 
 	// to determine the Content-Type header
