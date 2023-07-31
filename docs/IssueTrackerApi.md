@@ -69,7 +69,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **RepositoriesWorkspaceRepoSlugComponentsGet**
-> PaginatedComponents RepositoriesWorkspaceRepoSlugComponentsGet(ctx, repoSlug, workspace)
+> PaginatedComponents RepositoriesWorkspaceRepoSlugComponentsGet(ctx, repoSlug, workspace, optional)
 List components
 
 Returns the components that have been defined in the issue tracker.  This resource is only available on repositories that have the issue tracker enabled.
@@ -81,6 +81,15 @@ Name | Type | Description  | Notes
  **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
   **repoSlug** | **string**| This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;.  | 
   **workspace** | **string**| This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example: &#x60;{workspace UUID}&#x60;.  | 
+ **optional** | ***IssueTrackerApiRepositoriesWorkspaceRepoSlugComponentsGetOpts** | optional parameters | nil if no parameters
+
+### Optional Parameters
+Optional parameters are passed through a pointer to a IssueTrackerApiRepositoriesWorkspaceRepoSlugComponentsGetOpts struct
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+ **page** | **optional.Int32**| page | 
 
 ### Return type
 
@@ -118,7 +127,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
 
- **body** | [**optional.Interface of ExportOptions**](ExportOptions.md)| The options to apply to the export. Available options include &#x60;project_key&#x60; and &#x60;project_name&#x60; which, if specified, are used as the project key and name in the exported Jira json format. Option &#x60;send_email&#x60; specifies whether an email should be sent upon export result. Option &#x60;include_attachments&#x60; specifies whether attachments are included in the export. | 
+ **body** | [**optional.Interface of ModelError**](map.md)| The options to apply to the export. Available options include &#x60;project_key&#x60; and &#x60;project_name&#x60; which, if specified, are used as the project key and name in the exported Jira json format. Option &#x60;send_email&#x60; specifies whether an email should be sent upon export result. Option &#x60;include_attachments&#x60; specifies whether attachments are included in the export. | 
 
 ### Return type
 
@@ -167,7 +176,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **RepositoriesWorkspaceRepoSlugIssuesGet**
-> PaginatedIssues RepositoriesWorkspaceRepoSlugIssuesGet(ctx, repoSlug, workspace)
+> PaginatedIssues RepositoriesWorkspaceRepoSlugIssuesGet(ctx, repoSlug, workspace, optional)
 List issues
 
 Returns the issues in the issue tracker.
@@ -179,6 +188,15 @@ Name | Type | Description  | Notes
  **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
   **repoSlug** | **string**| This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;.  | 
   **workspace** | **string**| This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example: &#x60;{workspace UUID}&#x60;.  | 
+ **optional** | ***IssueTrackerApiRepositoriesWorkspaceRepoSlugIssuesGetOpts** | optional parameters | nil if no parameters
+
+### Optional Parameters
+Optional parameters are passed through a pointer to a IssueTrackerApiRepositoriesWorkspaceRepoSlugIssuesGetOpts struct
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+ **page** | **optional.Int32**| page | 
 
 ### Return type
 
@@ -254,7 +272,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **RepositoriesWorkspaceRepoSlugIssuesIssueIdAttachmentsGet**
-> PaginatedIssueAttachments RepositoriesWorkspaceRepoSlugIssuesIssueIdAttachmentsGet(ctx, issueId, repoSlug, workspace)
+> PaginatedIssueAttachments RepositoriesWorkspaceRepoSlugIssuesIssueIdAttachmentsGet(ctx, issueId, repoSlug, workspace, optional)
 List attachments for an issue
 
 Returns all attachments for this issue.  This returns the files' meta data. This does not return the files' actual contents.  The files are always ordered by their upload date.
@@ -267,6 +285,16 @@ Name | Type | Description  | Notes
   **issueId** | **string**| The issue id | 
   **repoSlug** | **string**| This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;.  | 
   **workspace** | **string**| This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example: &#x60;{workspace UUID}&#x60;.  | 
+ **optional** | ***IssueTrackerApiRepositoriesWorkspaceRepoSlugIssuesIssueIdAttachmentsGetOpts** | optional parameters | nil if no parameters
+
+### Optional Parameters
+Optional parameters are passed through a pointer to a IssueTrackerApiRepositoriesWorkspaceRepoSlugIssuesIssueIdAttachmentsGetOpts struct
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+
+ **page** | **optional.Int32**| page | 
 
 ### Return type
 
@@ -376,7 +404,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **RepositoriesWorkspaceRepoSlugIssuesIssueIdChangesChangeIdGet**
-> IssueChange RepositoriesWorkspaceRepoSlugIssuesIssueIdChangesChangeIdGet(ctx, changeId, issueId, repoSlug, workspace)
+> ModelError RepositoriesWorkspaceRepoSlugIssuesIssueIdChangesChangeIdGet(ctx, changeId, issueId, repoSlug, workspace)
 Get issue change object
 
 Returns the specified issue change object.  This resource is only available on repositories that have the issue tracker enabled.
@@ -393,7 +421,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**IssueChange**](issue_change.md)
+[**ModelError**](map.md)
 
 ### Authorization
 
@@ -431,6 +459,7 @@ Name | Type | Description  | Notes
 
  **q** | **optional.String**|  Query string to narrow down the response. See [filtering and sorting](/cloud/bitbucket/rest/intro/#filtering) for details. | 
  **sort** | **optional.String**|  Name of a response property to sort results. See [filtering and sorting](/cloud/bitbucket/rest/intro/#sorting-query-results) for details.  | 
+ **page** | **optional.Int32**| page | 
 
 ### Return type
 
@@ -448,7 +477,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **RepositoriesWorkspaceRepoSlugIssuesIssueIdChangesPost**
-> IssueChange RepositoriesWorkspaceRepoSlugIssuesIssueIdChangesPost(ctx, body, issueId, repoSlug, workspace)
+> ModelError RepositoriesWorkspaceRepoSlugIssuesIssueIdChangesPost(ctx, body, issueId, repoSlug, workspace)
 Modify the state of an issue
 
 Makes a change to the specified issue.  For example, to change an issue's state and assignee, create a new change object that modifies these fields:  ``` curl https://api.bitbucket.org/2.0/site/master/issues/1234/changes \\   -s -u evzijst -X POST -H \"Content-Type: application/json\" \\   -d '{     \"changes\": {       \"assignee_account_id\": {         \"new\": \"557058:c0b72ad0-1cb5-4018-9cdc-0cde8492c443\"       },       \"state\": {         \"new\": 'resolved\"       }     }     \"message\": {       \"raw\": \"This is now resolved.\"     }   }' ```  The above example also includes a custom comment to go alongside the change. This comment will also be visible on the issue page in the UI.  The fields of the `changes` object are strings, not objects. This allows for immutable change log records, even after user accounts, milestones, or other objects recorded in a change entry, get renamed or deleted.  The `assignee_account_id` field stores the account id. When POSTing a new change and changing the assignee, the client should therefore use the user's account_id in the `changes.assignee_account_id.new` field.  This call requires authentication. Private repositories or private issue trackers require the caller to authenticate with an account that has appropriate authorization.
@@ -458,14 +487,14 @@ Makes a change to the specified issue.  For example, to change an issue's state 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-  **body** | [**IssueChange**](IssueChange.md)| The new issue state change. The only required elements are &#x60;changes.[].new&#x60;. All other elements can be omitted from the body. | 
+  **body** | [**ModelError**](map.md)| The new issue state change. The only required elements are &#x60;changes.[].new&#x60;. All other elements can be omitted from the body. | 
   **issueId** | **string**| The issue id | 
   **repoSlug** | **string**| This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;.  | 
   **workspace** | **string**| This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example: &#x60;{workspace UUID}&#x60;.  | 
 
 ### Return type
 
-[**IssueChange**](issue_change.md)
+[**ModelError**](map.md)
 
 ### Authorization
 
@@ -596,6 +625,7 @@ Name | Type | Description  | Notes
 
 
  **q** | **optional.String**|  Query string to narrow down the response as per [filtering and sorting](/cloud/bitbucket/rest/intro/#filtering). | 
+ **page** | **optional.Int32**| page | 
 
 ### Return type
 
@@ -750,7 +780,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**ModelError**](error.md)
+[**ModelError**](map.md)
 
 ### Authorization
 
@@ -780,7 +810,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**ModelError**](error.md)
+[**ModelError**](map.md)
 
 ### Authorization
 
@@ -810,7 +840,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**ModelError**](error.md)
+[**ModelError**](map.md)
 
 ### Authorization
 
@@ -840,7 +870,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**ModelError**](error.md)
+[**ModelError**](map.md)
 
 ### Authorization
 
@@ -870,7 +900,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**ModelError**](error.md)
+[**ModelError**](map.md)
 
 ### Authorization
 
@@ -900,7 +930,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**ModelError**](error.md)
+[**ModelError**](map.md)
 
 ### Authorization
 
@@ -944,7 +974,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **RepositoriesWorkspaceRepoSlugMilestonesGet**
-> PaginatedMilestones RepositoriesWorkspaceRepoSlugMilestonesGet(ctx, repoSlug, workspace)
+> PaginatedMilestones RepositoriesWorkspaceRepoSlugMilestonesGet(ctx, repoSlug, workspace, optional)
 List milestones
 
 Returns the milestones that have been defined in the issue tracker.  This resource is only available on repositories that have the issue tracker enabled.
@@ -956,6 +986,15 @@ Name | Type | Description  | Notes
  **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
   **repoSlug** | **string**| This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;.  | 
   **workspace** | **string**| This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example: &#x60;{workspace UUID}&#x60;.  | 
+ **optional** | ***IssueTrackerApiRepositoriesWorkspaceRepoSlugMilestonesGetOpts** | optional parameters | nil if no parameters
+
+### Optional Parameters
+Optional parameters are passed through a pointer to a IssueTrackerApiRepositoriesWorkspaceRepoSlugMilestonesGetOpts struct
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+ **page** | **optional.Int32**| page | 
 
 ### Return type
 
@@ -1003,7 +1042,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **RepositoriesWorkspaceRepoSlugVersionsGet**
-> PaginatedVersions RepositoriesWorkspaceRepoSlugVersionsGet(ctx, repoSlug, workspace)
+> PaginatedVersions RepositoriesWorkspaceRepoSlugVersionsGet(ctx, repoSlug, workspace, optional)
 List defined versions for issues
 
 Returns the versions that have been defined in the issue tracker.  This resource is only available on repositories that have the issue tracker enabled.
@@ -1015,6 +1054,15 @@ Name | Type | Description  | Notes
  **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
   **repoSlug** | **string**| This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;.  | 
   **workspace** | **string**| This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example: &#x60;{workspace UUID}&#x60;.  | 
+ **optional** | ***IssueTrackerApiRepositoriesWorkspaceRepoSlugVersionsGetOpts** | optional parameters | nil if no parameters
+
+### Optional Parameters
+Optional parameters are passed through a pointer to a IssueTrackerApiRepositoriesWorkspaceRepoSlugVersionsGetOpts struct
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+ **page** | **optional.Int32**| page | 
 
 ### Return type
 

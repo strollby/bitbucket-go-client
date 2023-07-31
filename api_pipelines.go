@@ -161,7 +161,7 @@ func (a *PipelinesApiService) CreatePipelineForRepository(ctx context.Context, b
 	)
 
 	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/repositories/{workspace}/{repo_slug}/pipelines/"
+	localVarPath := a.client.cfg.BasePath + "/repositories/{workspace}/{repo_slug}/pipelines"
 	localVarPath = strings.Replace(localVarPath, "{"+"workspace"+"}", fmt.Sprintf("%v", workspace), -1)
 	localVarPath = strings.Replace(localVarPath, "{"+"repo_slug"+"}", fmt.Sprintf("%v", repoSlug), -1)
 
@@ -277,7 +277,7 @@ func (a *PipelinesApiService) CreatePipelineVariableForTeam(ctx context.Context,
 	)
 
 	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/teams/{username}/pipelines_config/variables/"
+	localVarPath := a.client.cfg.BasePath + "/teams/{username}/pipelines_config/variables"
 	localVarPath = strings.Replace(localVarPath, "{"+"username"+"}", fmt.Sprintf("%v", username), -1)
 
 	localVarHeaderParams := make(map[string]string)
@@ -396,7 +396,7 @@ func (a *PipelinesApiService) CreatePipelineVariableForUser(ctx context.Context,
 	)
 
 	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/users/{selected_user}/pipelines_config/variables/"
+	localVarPath := a.client.cfg.BasePath + "/users/{selected_user}/pipelines_config/variables"
 	localVarPath = strings.Replace(localVarPath, "{"+"selected_user"+"}", fmt.Sprintf("%v", selectedUser), -1)
 
 	localVarHeaderParams := make(map[string]string)
@@ -630,7 +630,7 @@ func (a *PipelinesApiService) CreateRepositoryPipelineKnownHost(ctx context.Cont
 	)
 
 	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/"
+	localVarPath := a.client.cfg.BasePath + "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts"
 	localVarPath = strings.Replace(localVarPath, "{"+"workspace"+"}", fmt.Sprintf("%v", workspace), -1)
 	localVarPath = strings.Replace(localVarPath, "{"+"repo_slug"+"}", fmt.Sprintf("%v", repoSlug), -1)
 
@@ -732,7 +732,7 @@ Create a schedule for the given repository.
 
 @return PipelineSchedule
 */
-func (a *PipelinesApiService) CreateRepositoryPipelineSchedule(ctx context.Context, body PipelineSchedule, workspace string, repoSlug string) (PipelineSchedule, *http.Response, error) {
+func (a *PipelinesApiService) CreateRepositoryPipelineSchedule(ctx context.Context, body PipelineSchedulePostRequestBody, workspace string, repoSlug string) (PipelineSchedule, *http.Response, error) {
 	var (
 		localVarHttpMethod  = strings.ToUpper("Post")
 		localVarPostBody    interface{}
@@ -742,7 +742,7 @@ func (a *PipelinesApiService) CreateRepositoryPipelineSchedule(ctx context.Conte
 	)
 
 	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/"
+	localVarPath := a.client.cfg.BasePath + "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules"
 	localVarPath = strings.Replace(localVarPath, "{"+"workspace"+"}", fmt.Sprintf("%v", workspace), -1)
 	localVarPath = strings.Replace(localVarPath, "{"+"repo_slug"+"}", fmt.Sprintf("%v", repoSlug), -1)
 
@@ -864,7 +864,7 @@ func (a *PipelinesApiService) CreateRepositoryPipelineVariable(ctx context.Conte
 	)
 
 	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/repositories/{workspace}/{repo_slug}/pipelines_config/variables/"
+	localVarPath := a.client.cfg.BasePath + "/repositories/{workspace}/{repo_slug}/pipelines_config/variables"
 	localVarPath = strings.Replace(localVarPath, "{"+"workspace"+"}", fmt.Sprintf("%v", workspace), -1)
 	localVarPath = strings.Replace(localVarPath, "{"+"repo_slug"+"}", fmt.Sprintf("%v", repoSlug), -1)
 
@@ -1353,6 +1353,86 @@ func (a *PipelinesApiService) DeleteRepositoryPipelineCache(ctx context.Context,
 }
 
 /*
+PipelinesApiService Delete caches
+Delete repository cache versions by name.
+  - @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+  - @param workspace The account.
+  - @param repoSlug The repository.
+  - @param name The cache name.
+*/
+func (a *PipelinesApiService) DeleteRepositoryPipelineCaches(ctx context.Context, workspace string, repoSlug string, name string) (*http.Response, error) {
+	var (
+		localVarHttpMethod = strings.ToUpper("Delete")
+		localVarPostBody   interface{}
+		localVarFileName   string
+		localVarFileBytes  []byte
+	)
+
+	// create path and map variables
+	localVarPath := a.client.cfg.BasePath + "/repositories/{workspace}/{repo_slug}/pipelines-config/caches"
+	localVarPath = strings.Replace(localVarPath, "{"+"workspace"+"}", fmt.Sprintf("%v", workspace), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"repo_slug"+"}", fmt.Sprintf("%v", repoSlug), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	localVarQueryParams.Add("name", parameterToString(name, ""))
+	// to determine the Content-Type header
+	localVarHttpContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHttpContentType := selectHeaderContentType(localVarHttpContentTypes)
+	if localVarHttpContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHttpContentType
+	}
+
+	// to determine the Accept header
+	localVarHttpHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHttpHeaderAccept := selectHeaderAccept(localVarHttpHeaderAccepts)
+	if localVarHttpHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
+	}
+	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHttpMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFileName, localVarFileBytes)
+	if err != nil {
+		return nil, err
+	}
+
+	localVarHttpResponse, err := a.client.callAPI(r)
+	if err != nil || localVarHttpResponse == nil {
+		return localVarHttpResponse, err
+	}
+
+	localVarBody, err := ioutil.ReadAll(localVarHttpResponse.Body)
+	localVarHttpResponse.Body.Close()
+	if err != nil {
+		return localVarHttpResponse, err
+	}
+
+	if localVarHttpResponse.StatusCode >= 300 {
+		newErr := GenericSwaggerError{
+			body:  localVarBody,
+			error: localVarHttpResponse.Status,
+		}
+		if localVarHttpResponse.StatusCode == 404 {
+			var v ModelError
+			err = a.client.decode(&v, localVarBody, localVarHttpResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHttpResponse, newErr
+			}
+			newErr.model = v
+			return localVarHttpResponse, newErr
+		}
+		return localVarHttpResponse, newErr
+	}
+
+	return localVarHttpResponse, nil
+}
+
+/*
 PipelinesApiService Delete SSH key pair
 Delete the repository SSH key pair.
   - @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
@@ -1673,14 +1753,20 @@ func (a *PipelinesApiService) DeleteRepositoryPipelineVariable(ctx context.Conte
 /*
 PipelinesApiService List variables for an environment
 Find deployment environment level variables.
-  - @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-  - @param workspace This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example &#x60;{workspace UUID}&#x60;.
-  - @param repoSlug The repository.
-  - @param environmentUuid The environment.
-
+ * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param workspace This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example &#x60;{workspace UUID}&#x60;.
+ * @param repoSlug The repository.
+ * @param environmentUuid The environment.
+ * @param optional nil or *PipelinesApiGetDeploymentVariablesOpts - Optional Parameters:
+     * @param "Page" (optional.Int32) -  page
 @return PaginatedDeploymentVariable
 */
-func (a *PipelinesApiService) GetDeploymentVariables(ctx context.Context, workspace string, repoSlug string, environmentUuid string) (PaginatedDeploymentVariable, *http.Response, error) {
+
+type PipelinesApiGetDeploymentVariablesOpts struct {
+	Page optional.Int32
+}
+
+func (a *PipelinesApiService) GetDeploymentVariables(ctx context.Context, workspace string, repoSlug string, environmentUuid string, localVarOptionals *PipelinesApiGetDeploymentVariablesOpts) (PaginatedDeploymentVariable, *http.Response, error) {
 	var (
 		localVarHttpMethod  = strings.ToUpper("Get")
 		localVarPostBody    interface{}
@@ -1690,7 +1776,7 @@ func (a *PipelinesApiService) GetDeploymentVariables(ctx context.Context, worksp
 	)
 
 	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables?pagelen=50"
+	localVarPath := a.client.cfg.BasePath + "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables"
 	localVarPath = strings.Replace(localVarPath, "{"+"workspace"+"}", fmt.Sprintf("%v", workspace), -1)
 	localVarPath = strings.Replace(localVarPath, "{"+"repo_slug"+"}", fmt.Sprintf("%v", repoSlug), -1)
 	localVarPath = strings.Replace(localVarPath, "{"+"environment_uuid"+"}", fmt.Sprintf("%v", environmentUuid), -1)
@@ -1701,6 +1787,9 @@ func (a *PipelinesApiService) GetDeploymentVariables(ctx context.Context, worksp
 	localVarQueryParams.Set("pagelen", "100")		
 	localVarFormParams := url.Values{}
 
+	if localVarOptionals != nil && localVarOptionals.Page.IsSet() {
+		localVarQueryParams.Add("page", parameterToString(localVarOptionals.Page.Value(), ""))
+	}
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{}
 
@@ -2308,14 +2397,20 @@ func (a *PipelinesApiService) GetPipelineStepLogForRepository(ctx context.Contex
 /*
 PipelinesApiService List steps for a pipeline
 Find steps for the given pipeline.
-  - @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-  - @param workspace This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example &#x60;{workspace UUID}&#x60;.
-  - @param repoSlug The repository.
-  - @param pipelineUuid The UUID of the pipeline.
-
+ * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param workspace This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example &#x60;{workspace UUID}&#x60;.
+ * @param repoSlug The repository.
+ * @param pipelineUuid The UUID of the pipeline.
+ * @param optional nil or *PipelinesApiGetPipelineStepsForRepositoryOpts - Optional Parameters:
+     * @param "Page" (optional.Int32) -  page
 @return PaginatedPipelineSteps
 */
-func (a *PipelinesApiService) GetPipelineStepsForRepository(ctx context.Context, workspace string, repoSlug string, pipelineUuid string) (PaginatedPipelineSteps, *http.Response, error) {
+
+type PipelinesApiGetPipelineStepsForRepositoryOpts struct {
+	Page optional.Int32
+}
+
+func (a *PipelinesApiService) GetPipelineStepsForRepository(ctx context.Context, workspace string, repoSlug string, pipelineUuid string, localVarOptionals *PipelinesApiGetPipelineStepsForRepositoryOpts) (PaginatedPipelineSteps, *http.Response, error) {
 	var (
 		localVarHttpMethod  = strings.ToUpper("Get")
 		localVarPostBody    interface{}
@@ -2325,7 +2420,7 @@ func (a *PipelinesApiService) GetPipelineStepsForRepository(ctx context.Context,
 	)
 
 	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/"
+	localVarPath := a.client.cfg.BasePath + "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps"
 	localVarPath = strings.Replace(localVarPath, "{"+"workspace"+"}", fmt.Sprintf("%v", workspace), -1)
 	localVarPath = strings.Replace(localVarPath, "{"+"repo_slug"+"}", fmt.Sprintf("%v", repoSlug), -1)
 	localVarPath = strings.Replace(localVarPath, "{"+"pipeline_uuid"+"}", fmt.Sprintf("%v", pipelineUuid), -1)
@@ -2334,6 +2429,9 @@ func (a *PipelinesApiService) GetPipelineStepsForRepository(ctx context.Context,
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if localVarOptionals != nil && localVarOptionals.Page.IsSet() {
+		localVarQueryParams.Add("page", parameterToString(localVarOptionals.Page.Value(), ""))
+	}
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{}
 
@@ -2941,12 +3039,18 @@ func (a *PipelinesApiService) GetPipelineVariableForWorkspace(ctx context.Contex
 /*
 PipelinesApiService List variables for an account
 Find account level variables. This endpoint has been deprecated, and you should use the new workspaces endpoint. For more information, see [the announcement](https://developer.atlassian.com/cloud/bitbucket/bitbucket-api-teams-deprecation/).
-  - @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-  - @param username The account.
-
+ * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param username The account.
+ * @param optional nil or *PipelinesApiGetPipelineVariablesForTeamOpts - Optional Parameters:
+     * @param "Page" (optional.Int32) -  page
 @return PaginatedPipelineVariables
 */
-func (a *PipelinesApiService) GetPipelineVariablesForTeam(ctx context.Context, username string) (PaginatedPipelineVariables, *http.Response, error) {
+
+type PipelinesApiGetPipelineVariablesForTeamOpts struct {
+	Page optional.Int32
+}
+
+func (a *PipelinesApiService) GetPipelineVariablesForTeam(ctx context.Context, username string, localVarOptionals *PipelinesApiGetPipelineVariablesForTeamOpts) (PaginatedPipelineVariables, *http.Response, error) {
 	var (
 		localVarHttpMethod  = strings.ToUpper("Get")
 		localVarPostBody    interface{}
@@ -2956,13 +3060,16 @@ func (a *PipelinesApiService) GetPipelineVariablesForTeam(ctx context.Context, u
 	)
 
 	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/teams/{username}/pipelines_config/variables/"
+	localVarPath := a.client.cfg.BasePath + "/teams/{username}/pipelines_config/variables"
 	localVarPath = strings.Replace(localVarPath, "{"+"username"+"}", fmt.Sprintf("%v", username), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if localVarOptionals != nil && localVarOptionals.Page.IsSet() {
+		localVarQueryParams.Add("page", parameterToString(localVarOptionals.Page.Value(), ""))
+	}
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{}
 
@@ -3028,12 +3135,18 @@ func (a *PipelinesApiService) GetPipelineVariablesForTeam(ctx context.Context, u
 /*
 PipelinesApiService List variables for a user
 Find user level variables. This endpoint has been deprecated, and you should use the new workspaces endpoint. For more information, see [the announcement](https://developer.atlassian.com/cloud/bitbucket/bitbucket-api-teams-deprecation/).
-  - @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-  - @param selectedUser Either the UUID of the account surrounded by curly-braces, for example &#x60;{account UUID}&#x60;, OR an Atlassian Account ID.
-
+ * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param selectedUser Either the UUID of the account surrounded by curly-braces, for example &#x60;{account UUID}&#x60;, OR an Atlassian Account ID.
+ * @param optional nil or *PipelinesApiGetPipelineVariablesForUserOpts - Optional Parameters:
+     * @param "Page" (optional.Int32) -  page
 @return PaginatedPipelineVariables
 */
-func (a *PipelinesApiService) GetPipelineVariablesForUser(ctx context.Context, selectedUser string) (PaginatedPipelineVariables, *http.Response, error) {
+
+type PipelinesApiGetPipelineVariablesForUserOpts struct {
+	Page optional.Int32
+}
+
+func (a *PipelinesApiService) GetPipelineVariablesForUser(ctx context.Context, selectedUser string, localVarOptionals *PipelinesApiGetPipelineVariablesForUserOpts) (PaginatedPipelineVariables, *http.Response, error) {
 	var (
 		localVarHttpMethod  = strings.ToUpper("Get")
 		localVarPostBody    interface{}
@@ -3043,13 +3156,16 @@ func (a *PipelinesApiService) GetPipelineVariablesForUser(ctx context.Context, s
 	)
 
 	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/users/{selected_user}/pipelines_config/variables/"
+	localVarPath := a.client.cfg.BasePath + "/users/{selected_user}/pipelines_config/variables"
 	localVarPath = strings.Replace(localVarPath, "{"+"selected_user"+"}", fmt.Sprintf("%v", selectedUser), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if localVarOptionals != nil && localVarOptionals.Page.IsSet() {
+		localVarQueryParams.Add("page", parameterToString(localVarOptionals.Page.Value(), ""))
+	}
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{}
 
@@ -3115,12 +3231,18 @@ func (a *PipelinesApiService) GetPipelineVariablesForUser(ctx context.Context, s
 /*
 PipelinesApiService List variables for a workspace
 Find workspace level variables.
-  - @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-  - @param workspace This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example &#x60;{workspace UUID}&#x60;.
-
+ * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param workspace This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example &#x60;{workspace UUID}&#x60;.
+ * @param optional nil or *PipelinesApiGetPipelineVariablesForWorkspaceOpts - Optional Parameters:
+     * @param "Page" (optional.Int32) -  page
 @return PaginatedPipelineVariables
 */
-func (a *PipelinesApiService) GetPipelineVariablesForWorkspace(ctx context.Context, workspace string) (PaginatedPipelineVariables, *http.Response, error) {
+
+type PipelinesApiGetPipelineVariablesForWorkspaceOpts struct {
+	Page optional.Int32
+}
+
+func (a *PipelinesApiService) GetPipelineVariablesForWorkspace(ctx context.Context, workspace string, localVarOptionals *PipelinesApiGetPipelineVariablesForWorkspaceOpts) (PaginatedPipelineVariables, *http.Response, error) {
 	var (
 		localVarHttpMethod  = strings.ToUpper("Get")
 		localVarPostBody    interface{}
@@ -3137,6 +3259,9 @@ func (a *PipelinesApiService) GetPipelineVariablesForWorkspace(ctx context.Conte
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if localVarOptionals != nil && localVarOptionals.Page.IsSet() {
+		localVarQueryParams.Add("page", parameterToString(localVarOptionals.Page.Value(), ""))
+	}
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{}
 
@@ -3202,13 +3327,19 @@ func (a *PipelinesApiService) GetPipelineVariablesForWorkspace(ctx context.Conte
 /*
 PipelinesApiService List pipelines
 Find pipelines
-  - @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-  - @param workspace This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example &#x60;{workspace UUID}&#x60;.
-  - @param repoSlug The repository.
-
+ * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param workspace This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example &#x60;{workspace UUID}&#x60;.
+ * @param repoSlug The repository.
+ * @param optional nil or *PipelinesApiGetPipelinesForRepositoryOpts - Optional Parameters:
+     * @param "Page" (optional.Int32) -  page
 @return PaginatedPipelines
 */
-func (a *PipelinesApiService) GetPipelinesForRepository(ctx context.Context, workspace string, repoSlug string) (PaginatedPipelines, *http.Response, error) {
+
+type PipelinesApiGetPipelinesForRepositoryOpts struct {
+	Page optional.Int32
+}
+
+func (a *PipelinesApiService) GetPipelinesForRepository(ctx context.Context, workspace string, repoSlug string, localVarOptionals *PipelinesApiGetPipelinesForRepositoryOpts) (PaginatedPipelines, *http.Response, error) {
 	var (
 		localVarHttpMethod  = strings.ToUpper("Get")
 		localVarPostBody    interface{}
@@ -3218,7 +3349,7 @@ func (a *PipelinesApiService) GetPipelinesForRepository(ctx context.Context, wor
 	)
 
 	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/repositories/{workspace}/{repo_slug}/pipelines/"
+	localVarPath := a.client.cfg.BasePath + "/repositories/{workspace}/{repo_slug}/pipelines"
 	localVarPath = strings.Replace(localVarPath, "{"+"workspace"+"}", fmt.Sprintf("%v", workspace), -1)
 	localVarPath = strings.Replace(localVarPath, "{"+"repo_slug"+"}", fmt.Sprintf("%v", repoSlug), -1)
 
@@ -3226,6 +3357,9 @@ func (a *PipelinesApiService) GetPipelinesForRepository(ctx context.Context, wor
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if localVarOptionals != nil && localVarOptionals.Page.IsSet() {
+		localVarQueryParams.Add("page", parameterToString(localVarOptionals.Page.Value(), ""))
+	}
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{}
 
@@ -3392,13 +3526,19 @@ func (a *PipelinesApiService) GetRepositoryPipelineCacheContentURI(ctx context.C
 /*
 PipelinesApiService List caches
 Retrieve the repository pipelines caches.
-  - @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-  - @param workspace The account.
-  - @param repoSlug The repository.
-
+ * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param workspace The account.
+ * @param repoSlug The repository.
+ * @param optional nil or *PipelinesApiGetRepositoryPipelineCachesOpts - Optional Parameters:
+     * @param "Page" (optional.Int32) -  page
 @return PaginatedPipelineCaches
 */
-func (a *PipelinesApiService) GetRepositoryPipelineCaches(ctx context.Context, workspace string, repoSlug string) (PaginatedPipelineCaches, *http.Response, error) {
+
+type PipelinesApiGetRepositoryPipelineCachesOpts struct {
+	Page optional.Int32
+}
+
+func (a *PipelinesApiService) GetRepositoryPipelineCaches(ctx context.Context, workspace string, repoSlug string, localVarOptionals *PipelinesApiGetRepositoryPipelineCachesOpts) (PaginatedPipelineCaches, *http.Response, error) {
 	var (
 		localVarHttpMethod  = strings.ToUpper("Get")
 		localVarPostBody    interface{}
@@ -3408,7 +3548,7 @@ func (a *PipelinesApiService) GetRepositoryPipelineCaches(ctx context.Context, w
 	)
 
 	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/repositories/{workspace}/{repo_slug}/pipelines-config/caches/"
+	localVarPath := a.client.cfg.BasePath + "/repositories/{workspace}/{repo_slug}/pipelines-config/caches"
 	localVarPath = strings.Replace(localVarPath, "{"+"workspace"+"}", fmt.Sprintf("%v", workspace), -1)
 	localVarPath = strings.Replace(localVarPath, "{"+"repo_slug"+"}", fmt.Sprintf("%v", repoSlug), -1)
 
@@ -3416,6 +3556,9 @@ func (a *PipelinesApiService) GetRepositoryPipelineCaches(ctx context.Context, w
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if localVarOptionals != nil && localVarOptionals.Page.IsSet() {
+		localVarQueryParams.Add("page", parameterToString(localVarOptionals.Page.Value(), ""))
+	}
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{}
 
@@ -3681,13 +3824,19 @@ func (a *PipelinesApiService) GetRepositoryPipelineKnownHost(ctx context.Context
 /*
 PipelinesApiService List known hosts
 Find repository level known hosts.
-  - @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-  - @param workspace This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example &#x60;{workspace UUID}&#x60;.
-  - @param repoSlug The repository.
-
+ * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param workspace This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example &#x60;{workspace UUID}&#x60;.
+ * @param repoSlug The repository.
+ * @param optional nil or *PipelinesApiGetRepositoryPipelineKnownHostsOpts - Optional Parameters:
+     * @param "Page" (optional.Int32) -  page
 @return PaginatedPipelineKnownHosts
 */
-func (a *PipelinesApiService) GetRepositoryPipelineKnownHosts(ctx context.Context, workspace string, repoSlug string) (PaginatedPipelineKnownHosts, *http.Response, error) {
+
+type PipelinesApiGetRepositoryPipelineKnownHostsOpts struct {
+	Page optional.Int32
+}
+
+func (a *PipelinesApiService) GetRepositoryPipelineKnownHosts(ctx context.Context, workspace string, repoSlug string, localVarOptionals *PipelinesApiGetRepositoryPipelineKnownHostsOpts) (PaginatedPipelineKnownHosts, *http.Response, error) {
 	var (
 		localVarHttpMethod  = strings.ToUpper("Get")
 		localVarPostBody    interface{}
@@ -3697,7 +3846,7 @@ func (a *PipelinesApiService) GetRepositoryPipelineKnownHosts(ctx context.Contex
 	)
 
 	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/"
+	localVarPath := a.client.cfg.BasePath + "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts"
 	localVarPath = strings.Replace(localVarPath, "{"+"workspace"+"}", fmt.Sprintf("%v", workspace), -1)
 	localVarPath = strings.Replace(localVarPath, "{"+"repo_slug"+"}", fmt.Sprintf("%v", repoSlug), -1)
 
@@ -3705,6 +3854,9 @@ func (a *PipelinesApiService) GetRepositoryPipelineKnownHosts(ctx context.Contex
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if localVarOptionals != nil && localVarOptionals.Page.IsSet() {
+		localVarQueryParams.Add("page", parameterToString(localVarOptionals.Page.Value(), ""))
+	}
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{}
 
@@ -3871,14 +4023,20 @@ func (a *PipelinesApiService) GetRepositoryPipelineSchedule(ctx context.Context,
 /*
 PipelinesApiService List executions of a schedule
 Retrieve the executions of a given schedule.
-  - @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-  - @param workspace This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example &#x60;{workspace UUID}&#x60;.
-  - @param repoSlug The repository.
-  - @param scheduleUuid The uuid of the schedule.
-
+ * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param workspace This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example &#x60;{workspace UUID}&#x60;.
+ * @param repoSlug The repository.
+ * @param scheduleUuid The uuid of the schedule.
+ * @param optional nil or *PipelinesApiGetRepositoryPipelineScheduleExecutionsOpts - Optional Parameters:
+     * @param "Page" (optional.Int32) -  page
 @return PaginatedPipelineScheduleExecutions
 */
-func (a *PipelinesApiService) GetRepositoryPipelineScheduleExecutions(ctx context.Context, workspace string, repoSlug string, scheduleUuid string) (PaginatedPipelineScheduleExecutions, *http.Response, error) {
+
+type PipelinesApiGetRepositoryPipelineScheduleExecutionsOpts struct {
+	Page optional.Int32
+}
+
+func (a *PipelinesApiService) GetRepositoryPipelineScheduleExecutions(ctx context.Context, workspace string, repoSlug string, scheduleUuid string, localVarOptionals *PipelinesApiGetRepositoryPipelineScheduleExecutionsOpts) (PaginatedPipelineScheduleExecutions, *http.Response, error) {
 	var (
 		localVarHttpMethod  = strings.ToUpper("Get")
 		localVarPostBody    interface{}
@@ -3888,7 +4046,7 @@ func (a *PipelinesApiService) GetRepositoryPipelineScheduleExecutions(ctx contex
 	)
 
 	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}/executions/"
+	localVarPath := a.client.cfg.BasePath + "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}/executions"
 	localVarPath = strings.Replace(localVarPath, "{"+"workspace"+"}", fmt.Sprintf("%v", workspace), -1)
 	localVarPath = strings.Replace(localVarPath, "{"+"repo_slug"+"}", fmt.Sprintf("%v", repoSlug), -1)
 	localVarPath = strings.Replace(localVarPath, "{"+"schedule_uuid"+"}", fmt.Sprintf("%v", scheduleUuid), -1)
@@ -3897,6 +4055,9 @@ func (a *PipelinesApiService) GetRepositoryPipelineScheduleExecutions(ctx contex
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if localVarOptionals != nil && localVarOptionals.Page.IsSet() {
+		localVarQueryParams.Add("page", parameterToString(localVarOptionals.Page.Value(), ""))
+	}
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{}
 
@@ -3972,13 +4133,19 @@ func (a *PipelinesApiService) GetRepositoryPipelineScheduleExecutions(ctx contex
 /*
 PipelinesApiService List schedules
 Retrieve the configured schedules for the given repository.
-  - @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-  - @param workspace This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example &#x60;{workspace UUID}&#x60;.
-  - @param repoSlug The repository.
-
+ * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param workspace This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example &#x60;{workspace UUID}&#x60;.
+ * @param repoSlug The repository.
+ * @param optional nil or *PipelinesApiGetRepositoryPipelineSchedulesOpts - Optional Parameters:
+     * @param "Page" (optional.Int32) -  page
 @return PaginatedPipelineSchedules
 */
-func (a *PipelinesApiService) GetRepositoryPipelineSchedules(ctx context.Context, workspace string, repoSlug string) (PaginatedPipelineSchedules, *http.Response, error) {
+
+type PipelinesApiGetRepositoryPipelineSchedulesOpts struct {
+	Page optional.Int32
+}
+
+func (a *PipelinesApiService) GetRepositoryPipelineSchedules(ctx context.Context, workspace string, repoSlug string, localVarOptionals *PipelinesApiGetRepositoryPipelineSchedulesOpts) (PaginatedPipelineSchedules, *http.Response, error) {
 	var (
 		localVarHttpMethod  = strings.ToUpper("Get")
 		localVarPostBody    interface{}
@@ -3988,7 +4155,7 @@ func (a *PipelinesApiService) GetRepositoryPipelineSchedules(ctx context.Context
 	)
 
 	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/"
+	localVarPath := a.client.cfg.BasePath + "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules"
 	localVarPath = strings.Replace(localVarPath, "{"+"workspace"+"}", fmt.Sprintf("%v", workspace), -1)
 	localVarPath = strings.Replace(localVarPath, "{"+"repo_slug"+"}", fmt.Sprintf("%v", repoSlug), -1)
 
@@ -3996,6 +4163,9 @@ func (a *PipelinesApiService) GetRepositoryPipelineSchedules(ctx context.Context
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if localVarOptionals != nil && localVarOptionals.Page.IsSet() {
+		localVarQueryParams.Add("page", parameterToString(localVarOptionals.Page.Value(), ""))
+	}
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{}
 
@@ -4271,13 +4441,19 @@ func (a *PipelinesApiService) GetRepositoryPipelineVariable(ctx context.Context,
 /*
 PipelinesApiService List variables for a repository
 Find repository level variables.
-  - @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-  - @param workspace This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example &#x60;{workspace UUID}&#x60;.
-  - @param repoSlug The repository.
-
+ * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param workspace This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example &#x60;{workspace UUID}&#x60;.
+ * @param repoSlug The repository.
+ * @param optional nil or *PipelinesApiGetRepositoryPipelineVariablesOpts - Optional Parameters:
+     * @param "Page" (optional.Int32) -  page
 @return PaginatedPipelineVariables
 */
-func (a *PipelinesApiService) GetRepositoryPipelineVariables(ctx context.Context, workspace string, repoSlug string) (PaginatedPipelineVariables, *http.Response, error) {
+
+type PipelinesApiGetRepositoryPipelineVariablesOpts struct {
+	Page optional.Int32
+}
+
+func (a *PipelinesApiService) GetRepositoryPipelineVariables(ctx context.Context, workspace string, repoSlug string, localVarOptionals *PipelinesApiGetRepositoryPipelineVariablesOpts) (PaginatedPipelineVariables, *http.Response, error) {
 	var (
 		localVarHttpMethod  = strings.ToUpper("Get")
 		localVarPostBody    interface{}
@@ -4287,7 +4463,7 @@ func (a *PipelinesApiService) GetRepositoryPipelineVariables(ctx context.Context
 	)
 
 	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/repositories/{workspace}/{repo_slug}/pipelines_config/variables/"
+	localVarPath := a.client.cfg.BasePath + "/repositories/{workspace}/{repo_slug}/pipelines_config/variables"
 	localVarPath = strings.Replace(localVarPath, "{"+"workspace"+"}", fmt.Sprintf("%v", workspace), -1)
 	localVarPath = strings.Replace(localVarPath, "{"+"repo_slug"+"}", fmt.Sprintf("%v", repoSlug), -1)
 
@@ -4295,6 +4471,9 @@ func (a *PipelinesApiService) GetRepositoryPipelineVariables(ctx context.Context
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if localVarOptionals != nil && localVarOptionals.Page.IsSet() {
+		localVarQueryParams.Add("page", parameterToString(localVarOptionals.Page.Value(), ""))
+	}
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{}
 
@@ -5280,7 +5459,7 @@ Update a schedule.
 
 @return PipelineSchedule
 */
-func (a *PipelinesApiService) UpdateRepositoryPipelineSchedule(ctx context.Context, body PipelineSchedule, workspace string, repoSlug string, scheduleUuid string) (PipelineSchedule, *http.Response, error) {
+func (a *PipelinesApiService) UpdateRepositoryPipelineSchedule(ctx context.Context, body PipelineSchedulePutRequestBody, workspace string, repoSlug string, scheduleUuid string) (PipelineSchedule, *http.Response, error) {
 	var (
 		localVarHttpMethod  = strings.ToUpper("Put")
 		localVarPostBody    interface{}

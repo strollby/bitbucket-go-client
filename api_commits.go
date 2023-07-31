@@ -12,11 +12,12 @@ package bitbucket
 import (
 	"context"
 	"fmt"
-	"github.com/antihax/optional"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/antihax/optional"
 )
 
 // Linger please
@@ -590,15 +591,21 @@ func (a *CommitsApiService) GetAnnotation(ctx context.Context, workspace string,
 /*
 CommitsApiService List annotations
 Returns a paginated list of Annotations for a specified report.
-  - @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-  - @param workspace This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example &#x60;{workspace UUID}&#x60;.
-  - @param repoSlug The repository.
-  - @param commit The commit for which to retrieve reports.
-  - @param reportId Uuid or external-if of the report for which to get annotations for.
-
+ * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param workspace This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example &#x60;{workspace UUID}&#x60;.
+ * @param repoSlug The repository.
+ * @param commit The commit for which to retrieve reports.
+ * @param reportId Uuid or external-if of the report for which to get annotations for.
+ * @param optional nil or *CommitsApiGetAnnotationsForReportOpts - Optional Parameters:
+     * @param "Page" (optional.Int32) -  page
 @return PaginatedAnnotations
 */
-func (a *CommitsApiService) GetAnnotationsForReport(ctx context.Context, workspace string, repoSlug string, commit string, reportId string) (PaginatedAnnotations, *http.Response, error) {
+
+type CommitsApiGetAnnotationsForReportOpts struct {
+	Page optional.Int32
+}
+
+func (a *CommitsApiService) GetAnnotationsForReport(ctx context.Context, workspace string, repoSlug string, commit string, reportId string, localVarOptionals *CommitsApiGetAnnotationsForReportOpts) (PaginatedAnnotations, *http.Response, error) {
 	var (
 		localVarHttpMethod  = strings.ToUpper("Get")
 		localVarPostBody    interface{}
@@ -618,6 +625,9 @@ func (a *CommitsApiService) GetAnnotationsForReport(ctx context.Context, workspa
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if localVarOptionals != nil && localVarOptionals.Page.IsSet() {
+		localVarQueryParams.Add("page", parameterToString(localVarOptionals.Page.Value(), ""))
+	}
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{}
 
@@ -786,14 +796,20 @@ func (a *CommitsApiService) GetReport(ctx context.Context, workspace string, rep
 /*
 CommitsApiService List reports
 Returns a paginated list of Reports linked to this commit.
-  - @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-  - @param workspace This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example &#x60;{workspace UUID}&#x60;.
-  - @param repoSlug The repository.
-  - @param commit The commit for which to retrieve reports.
-
+ * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param workspace This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example &#x60;{workspace UUID}&#x60;.
+ * @param repoSlug The repository.
+ * @param commit The commit for which to retrieve reports.
+ * @param optional nil or *CommitsApiGetReportsForCommitOpts - Optional Parameters:
+     * @param "Page" (optional.Int32) -  page
 @return PaginatedReports
 */
-func (a *CommitsApiService) GetReportsForCommit(ctx context.Context, workspace string, repoSlug string, commit string) (PaginatedReports, *http.Response, error) {
+
+type CommitsApiGetReportsForCommitOpts struct {
+	Page optional.Int32
+}
+
+func (a *CommitsApiService) GetReportsForCommit(ctx context.Context, workspace string, repoSlug string, commit string, localVarOptionals *CommitsApiGetReportsForCommitOpts) (PaginatedReports, *http.Response, error) {
 	var (
 		localVarHttpMethod  = strings.ToUpper("Get")
 		localVarPostBody    interface{}
@@ -812,6 +828,9 @@ func (a *CommitsApiService) GetReportsForCommit(ctx context.Context, workspace s
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if localVarOptionals != nil && localVarOptionals.Page.IsSet() {
+		localVarQueryParams.Add("page", parameterToString(localVarOptionals.Page.Value(), ""))
+	}
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{}
 
@@ -1082,6 +1101,91 @@ func (a *CommitsApiService) RepositoriesWorkspaceRepoSlugCommitCommitApprovePost
 }
 
 /*
+CommitsApiService Delete a commit comment
+Deletes the specified commit comment.  Note that deleting comments that have visible replies that point to them will not really delete the resource. This is to retain the integrity of the original comment tree. Instead, the &#x60;deleted&#x60; element is set to &#x60;true&#x60; and the content is blanked out. The comment will continue to be returned by the collections and self endpoints.
+  - @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+  - @param commentId The id of the comment.
+  - @param commit The commit&#x27;s SHA1.
+  - @param repoSlug This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;.
+  - @param workspace This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example: &#x60;{workspace UUID}&#x60;.
+*/
+func (a *CommitsApiService) RepositoriesWorkspaceRepoSlugCommitCommitCommentsCommentIdDelete(ctx context.Context, commentId int32, commit string, repoSlug string, workspace string) (*http.Response, error) {
+	var (
+		localVarHttpMethod = strings.ToUpper("Delete")
+		localVarPostBody   interface{}
+		localVarFileName   string
+		localVarFileBytes  []byte
+	)
+
+	// create path and map variables
+	localVarPath := a.client.cfg.BasePath + "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}"
+	localVarPath = strings.Replace(localVarPath, "{"+"comment_id"+"}", fmt.Sprintf("%v", commentId), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"commit"+"}", fmt.Sprintf("%v", commit), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"repo_slug"+"}", fmt.Sprintf("%v", repoSlug), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"workspace"+"}", fmt.Sprintf("%v", workspace), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHttpContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHttpContentType := selectHeaderContentType(localVarHttpContentTypes)
+	if localVarHttpContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHttpContentType
+	}
+
+	// to determine the Accept header
+	localVarHttpHeaderAccepts := []string{}
+
+	// set Accept header
+	localVarHttpHeaderAccept := selectHeaderAccept(localVarHttpHeaderAccepts)
+	if localVarHttpHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
+	}
+	if ctx != nil {
+		// API Key Authentication
+		if auth, ok := ctx.Value(ContextAPIKey).(APIKey); ok {
+			var key string
+			if auth.Prefix != "" {
+				key = auth.Prefix + " " + auth.Key
+			} else {
+				key = auth.Key
+			}
+			localVarHeaderParams["Authorization"] = key
+
+		}
+	}
+	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHttpMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFileName, localVarFileBytes)
+	if err != nil {
+		return nil, err
+	}
+
+	localVarHttpResponse, err := a.client.callAPI(r)
+	if err != nil || localVarHttpResponse == nil {
+		return localVarHttpResponse, err
+	}
+
+	localVarBody, err := ioutil.ReadAll(localVarHttpResponse.Body)
+	localVarHttpResponse.Body.Close()
+	if err != nil {
+		return localVarHttpResponse, err
+	}
+
+	if localVarHttpResponse.StatusCode >= 300 {
+		newErr := GenericSwaggerError{
+			body:  localVarBody,
+			error: localVarHttpResponse.Status,
+		}
+		return localVarHttpResponse, newErr
+	}
+
+	return localVarHttpResponse, nil
+}
+
+/*
 CommitsApiService Get a commit comment
 Returns the specified commit comment.
   - @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
@@ -1188,6 +1292,94 @@ func (a *CommitsApiService) RepositoriesWorkspaceRepoSlugCommitCommitCommentsCom
 }
 
 /*
+CommitsApiService Update a commit comment
+Used to update the contents of a comment. Only the content of the comment can be updated.  &#x60;&#x60;&#x60; $ curl https://api.bitbucket.org/2.0/repositories/atlassian/prlinks/commit/7f71b5/comments/5728901 \\   -X PUT -u evzijst \\   -H &#x27;Content-Type: application/json&#x27; \\   -d &#x27;{\&quot;content\&quot;: {\&quot;raw\&quot;: \&quot;One more thing!\&quot;}&#x27; &#x60;&#x60;&#x60;
+  - @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+  - @param body The updated comment.
+  - @param commentId The id of the comment.
+  - @param commit The commit&#x27;s SHA1.
+  - @param repoSlug This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;.
+  - @param workspace This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example: &#x60;{workspace UUID}&#x60;.
+*/
+func (a *CommitsApiService) RepositoriesWorkspaceRepoSlugCommitCommitCommentsCommentIdPut(ctx context.Context, body CommitComment, commentId int32, commit string, repoSlug string, workspace string) (*http.Response, error) {
+	var (
+		localVarHttpMethod = strings.ToUpper("Put")
+		localVarPostBody   interface{}
+		localVarFileName   string
+		localVarFileBytes  []byte
+	)
+
+	// create path and map variables
+	localVarPath := a.client.cfg.BasePath + "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}"
+	localVarPath = strings.Replace(localVarPath, "{"+"comment_id"+"}", fmt.Sprintf("%v", commentId), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"commit"+"}", fmt.Sprintf("%v", commit), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"repo_slug"+"}", fmt.Sprintf("%v", repoSlug), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"workspace"+"}", fmt.Sprintf("%v", workspace), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHttpContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHttpContentType := selectHeaderContentType(localVarHttpContentTypes)
+	if localVarHttpContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHttpContentType
+	}
+
+	// to determine the Accept header
+	localVarHttpHeaderAccepts := []string{}
+
+	// set Accept header
+	localVarHttpHeaderAccept := selectHeaderAccept(localVarHttpHeaderAccepts)
+	if localVarHttpHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
+	}
+	// body params
+	localVarPostBody = &body
+	if ctx != nil {
+		// API Key Authentication
+		if auth, ok := ctx.Value(ContextAPIKey).(APIKey); ok {
+			var key string
+			if auth.Prefix != "" {
+				key = auth.Prefix + " " + auth.Key
+			} else {
+				key = auth.Key
+			}
+			localVarHeaderParams["Authorization"] = key
+
+		}
+	}
+	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHttpMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFileName, localVarFileBytes)
+	if err != nil {
+		return nil, err
+	}
+
+	localVarHttpResponse, err := a.client.callAPI(r)
+	if err != nil || localVarHttpResponse == nil {
+		return localVarHttpResponse, err
+	}
+
+	localVarBody, err := ioutil.ReadAll(localVarHttpResponse.Body)
+	localVarHttpResponse.Body.Close()
+	if err != nil {
+		return localVarHttpResponse, err
+	}
+
+	if localVarHttpResponse.StatusCode >= 300 {
+		newErr := GenericSwaggerError{
+			body:  localVarBody,
+			error: localVarHttpResponse.Status,
+		}
+		return localVarHttpResponse, newErr
+	}
+
+	return localVarHttpResponse, nil
+}
+
+/*
 CommitsApiService List a commit&#x27;s comments
 Returns the commit&#x27;s comments.  This includes both global and inline comments.  The default sorting is oldest to newest and can be overridden with the &#x60;sort&#x60; query parameter.
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
@@ -1197,12 +1389,14 @@ Returns the commit&#x27;s comments.  This includes both global and inline commen
  * @param optional nil or *CommitsApiRepositoriesWorkspaceRepoSlugCommitCommitCommentsGetOpts - Optional Parameters:
      * @param "Q" (optional.String) -  Query string to narrow down the response as per [filtering and sorting](/cloud/bitbucket/rest/intro/#filtering).
      * @param "Sort" (optional.String) -  Field by which the results should be sorted as per [filtering and sorting](/cloud/bitbucket/rest/intro/#filtering).
+     * @param "Page" (optional.Int32) -  page
 @return PaginatedCommitComments
 */
 
 type CommitsApiRepositoriesWorkspaceRepoSlugCommitCommitCommentsGetOpts struct {
 	Q    optional.String
 	Sort optional.String
+	Page optional.Int32
 }
 
 func (a *CommitsApiService) RepositoriesWorkspaceRepoSlugCommitCommitCommentsGet(ctx context.Context, commit string, repoSlug string, workspace string, localVarOptionals *CommitsApiRepositoriesWorkspaceRepoSlugCommitCommitCommentsGetOpts) (PaginatedCommitComments, *http.Response, error) {
@@ -1229,6 +1423,9 @@ func (a *CommitsApiService) RepositoriesWorkspaceRepoSlugCommitCommitCommentsGet
 	}
 	if localVarOptionals != nil && localVarOptionals.Sort.IsSet() {
 		localVarQueryParams.Add("sort", parameterToString(localVarOptionals.Sort.Value(), ""))
+	}
+	if localVarOptionals != nil && localVarOptionals.Page.IsSet() {
+		localVarQueryParams.Add("page", parameterToString(localVarOptionals.Page.Value(), ""))
 	}
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{}
@@ -1508,13 +1705,19 @@ func (a *CommitsApiService) RepositoriesWorkspaceRepoSlugCommitCommitGet(ctx con
 /*
 CommitsApiService List commits
 These are the repository&#x27;s commits. They are paginated and returned in reverse chronological order, similar to the output of &#x60;git log&#x60;. Like these tools, the DAG can be filtered.  #### GET /repositories/{workspace}/{repo_slug}/commits/  Returns all commits in the repo in topological order (newest commit first). All branches and tags are included (similar to &#x60;git log --all&#x60;).  #### GET /repositories/{workspace}/{repo_slug}/commits/?exclude&#x3D;master  Returns all commits in the repo that are not on master (similar to &#x60;git log --all ^master&#x60;).  #### GET /repositories/{workspace}/{repo_slug}/commits/?include&#x3D;foo&amp;include&#x3D;bar&amp;exclude&#x3D;fu&amp;exclude&#x3D;fubar  Returns all commits that are on refs &#x60;foo&#x60; or &#x60;bar&#x60;, but not on &#x60;fu&#x60; or &#x60;fubar&#x60; (similar to &#x60;git log foo bar ^fu ^fubar&#x60;).  An optional &#x60;path&#x60; parameter can be specified that will limit the results to commits that affect that path. &#x60;path&#x60; can either be a file or a directory. If a directory is specified, commits are returned that have modified any file in the directory tree rooted by &#x60;path&#x60;. It is important to note that if the &#x60;path&#x60; parameter is specified, the commits returned by this endpoint may no longer be a DAG, parent commits that do not modify the path will be omitted from the response.  #### GET /repositories/{workspace}/{repo_slug}/commits/?path&#x3D;README.md&amp;include&#x3D;foo&amp;include&#x3D;bar&amp;exclude&#x3D;master  Returns all commits that are on refs &#x60;foo&#x60; or &#x60;bar&#x60;, but not on &#x60;master&#x60; that changed the file README.md.  #### GET /repositories/{workspace}/{repo_slug}/commits/?path&#x3D;src/&amp;include&#x3D;foo&amp;include&#x3D;bar&amp;exclude&#x3D;master  Returns all commits that are on refs &#x60;foo&#x60; or &#x60;bar&#x60;, but not on &#x60;master&#x60; that changed to a file in any file in the directory src or its children.  Because the response could include a very large number of commits, it is paginated. Follow the &#x27;next&#x27; link in the response to navigate to the next page of commits. As with other paginated resources, do not construct your own links.  When the include and exclude parameters are more than can fit in a query string, clients can use a &#x60;x-www-form-urlencoded&#x60; POST instead.
-  - @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-  - @param repoSlug This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;.
-  - @param workspace This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example: &#x60;{workspace UUID}&#x60;.
-
+ * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param repoSlug This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;.
+ * @param workspace This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example: &#x60;{workspace UUID}&#x60;.
+ * @param optional nil or *CommitsApiRepositoriesWorkspaceRepoSlugCommitsGetOpts - Optional Parameters:
+     * @param "Page" (optional.Int32) -  page
 @return PaginatedChangeset
 */
-func (a *CommitsApiService) RepositoriesWorkspaceRepoSlugCommitsGet(ctx context.Context, repoSlug string, workspace string) (PaginatedChangeset, *http.Response, error) {
+
+type CommitsApiRepositoriesWorkspaceRepoSlugCommitsGetOpts struct {
+	Page optional.Int32
+}
+
+func (a *CommitsApiService) RepositoriesWorkspaceRepoSlugCommitsGet(ctx context.Context, repoSlug string, workspace string, localVarOptionals *CommitsApiRepositoriesWorkspaceRepoSlugCommitsGetOpts) (PaginatedChangeset, *http.Response, error) {
 	var (
 		localVarHttpMethod  = strings.ToUpper("Get")
 		localVarPostBody    interface{}
@@ -1532,6 +1735,9 @@ func (a *CommitsApiService) RepositoriesWorkspaceRepoSlugCommitsGet(ctx context.
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if localVarOptionals != nil && localVarOptionals.Page.IsSet() {
+		localVarQueryParams.Add("page", parameterToString(localVarOptionals.Page.Value(), ""))
+	}
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{}
 
@@ -1731,15 +1937,21 @@ func (a *CommitsApiService) RepositoriesWorkspaceRepoSlugCommitsPost(ctx context
 
 /*
 CommitsApiService List commits for revision
-These are the repository&#x27;s commits. They are paginated and returned in reverse chronological order, similar to the output of &#x60;git log&#x60;. Like these tools, the DAG can be filtered.  #### GET /repositories/{workspace}/{repo_slug}/commits/master  Returns all commits on rev &#x60;master&#x60; (similar to &#x60;git log master&#x60;).  #### GET /repositories/{workspace}/{repo_slug}/commits/dev?include&#x3D;foo&amp;exclude&#x3D;master  Returns all commits on ref &#x60;dev&#x60; or &#x60;foo&#x60;, except those that are reachable on &#x60;master&#x60; (similar to &#x60;git log dev foo ^master&#x60;).  An optional &#x60;path&#x60; parameter can be specified that will limit the results to commits that affect that path. &#x60;path&#x60; can either be a file or a directory. If a directory is specified, commits are returned that have modified any file in the directory tree rooted by &#x60;path&#x60;. It is important to note that if the &#x60;path&#x60; parameter is specified, the commits returned by this endpoint may no longer be a DAG, parent commits that do not modify the path will be omitted from the response.  #### GET /repositories/{workspace}/{repo_slug}/commits/dev?path&#x3D;README.md&amp;include&#x3D;foo&amp;include&#x3D;bar&amp;exclude&#x3D;master  Returns all commits that are on refs &#x60;dev&#x60; or &#x60;foo&#x60; or &#x60;bar&#x60;, but not on &#x60;master&#x60; that changed the file README.md.  #### GET /repositories/{workspace}/{repo_slug}/commits/dev?path&#x3D;src/&amp;include&#x3D;foo&amp;exclude&#x3D;master  Returns all commits that are on refs &#x60;dev&#x60; or &#x60;foo&#x60;, but not on &#x60;master&#x60; that changed to a file in any file in the directory src or its children.  Because the response could include a very large number of commits, it is paginated. Follow the &#x27;next&#x27; link in the response to navigate to the next page of commits. As with other paginated resources, do not construct your own links.  When the include and exclude parameters are more than can fit in a query string, clients can use a &#x60;x-www-form-urlencoded&#x60; POST instead.
-  - @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-  - @param repoSlug This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;.
-  - @param revision The commit&#x27;s SHA1.
-  - @param workspace This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example: &#x60;{workspace UUID}&#x60;.
-
+These are the repository&#x27;s commits. They are paginated and returned in reverse chronological order, similar to the output of &#x60;git log&#x60;. Like these tools, the DAG can be filtered.  #### GET /repositories/{workspace}/{repo_slug}/commits/master  Returns all commits on ref &#x60;master&#x60; (similar to &#x60;git log master&#x60;).  #### GET /repositories/{workspace}/{repo_slug}/commits/dev?include&#x3D;foo&amp;exclude&#x3D;master  Returns all commits on ref &#x60;dev&#x60; or &#x60;foo&#x60;, except those that are reachable on &#x60;master&#x60; (similar to &#x60;git log dev foo ^master&#x60;).  An optional &#x60;path&#x60; parameter can be specified that will limit the results to commits that affect that path. &#x60;path&#x60; can either be a file or a directory. If a directory is specified, commits are returned that have modified any file in the directory tree rooted by &#x60;path&#x60;. It is important to note that if the &#x60;path&#x60; parameter is specified, the commits returned by this endpoint may no longer be a DAG, parent commits that do not modify the path will be omitted from the response.  #### GET /repositories/{workspace}/{repo_slug}/commits/dev?path&#x3D;README.md&amp;include&#x3D;foo&amp;include&#x3D;bar&amp;exclude&#x3D;master  Returns all commits that are on refs &#x60;dev&#x60; or &#x60;foo&#x60; or &#x60;bar&#x60;, but not on &#x60;master&#x60; that changed the file README.md.  #### GET /repositories/{workspace}/{repo_slug}/commits/dev?path&#x3D;src/&amp;include&#x3D;foo&amp;exclude&#x3D;master  Returns all commits that are on refs &#x60;dev&#x60; or &#x60;foo&#x60;, but not on &#x60;master&#x60; that changed to a file in any file in the directory src or its children.  Because the response could include a very large number of commits, it is paginated. Follow the &#x27;next&#x27; link in the response to navigate to the next page of commits. As with other paginated resources, do not construct your own links.  When the include and exclude parameters are more than can fit in a query string, clients can use a &#x60;x-www-form-urlencoded&#x60; POST instead.
+ * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param repoSlug This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;.
+ * @param revision A commit SHA1 or ref name.
+ * @param workspace This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example: &#x60;{workspace UUID}&#x60;.
+ * @param optional nil or *CommitsApiRepositoriesWorkspaceRepoSlugCommitsRevisionGetOpts - Optional Parameters:
+     * @param "Page" (optional.Int32) -  page
 @return PaginatedChangeset
 */
-func (a *CommitsApiService) RepositoriesWorkspaceRepoSlugCommitsRevisionGet(ctx context.Context, repoSlug string, revision string, workspace string) (PaginatedChangeset, *http.Response, error) {
+
+type CommitsApiRepositoriesWorkspaceRepoSlugCommitsRevisionGetOpts struct {
+	Page optional.Int32
+}
+
+func (a *CommitsApiService) RepositoriesWorkspaceRepoSlugCommitsRevisionGet(ctx context.Context, repoSlug string, revision string, workspace string, localVarOptionals *CommitsApiRepositoriesWorkspaceRepoSlugCommitsRevisionGetOpts) (PaginatedChangeset, *http.Response, error) {
 	var (
 		localVarHttpMethod  = strings.ToUpper("Get")
 		localVarPostBody    interface{}
@@ -1758,6 +1970,9 @@ func (a *CommitsApiService) RepositoriesWorkspaceRepoSlugCommitsRevisionGet(ctx 
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if localVarOptionals != nil && localVarOptionals.Page.IsSet() {
+		localVarQueryParams.Add("page", parameterToString(localVarOptionals.Page.Value(), ""))
+	}
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{}
 
@@ -1848,7 +2063,7 @@ CommitsApiService List commits for revision using include/exclude
 Identical to &#x60;GET /repositories/{workspace}/{repo_slug}/commits/{revision}&#x60;, except that POST allows clients to place the include and exclude parameters in the request body to avoid URL length issues.  **Note that this resource does NOT support new commit creation.**
   - @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
   - @param repoSlug This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;.
-  - @param revision The commit&#x27;s SHA1.
+  - @param revision A commit SHA1 or ref name.
   - @param workspace This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example: &#x60;{workspace UUID}&#x60;.
 
 @return PaginatedChangeset
@@ -2093,17 +2308,18 @@ func (a *CommitsApiService) RepositoriesWorkspaceRepoSlugDiffSpecGet(ctx context
 
 /*
 CommitsApiService Compare two commit diff stats
-Produces a response in JSON format with a record for every path modified, including information on the type of the change and the number of lines added and removed.  #### Single commit spec  If the &#x60;spec&#x60; argument to this API is a single commit, the diff is produced against the first parent of the specified commit.  #### Two commit spec  Two commits separated by &#x60;..&#x60; may be provided as the &#x60;spec&#x60;, e.g., &#x60;3a8b42..9ff173&#x60;. When two commits are provided and the &#x60;topic&#x60; query parameter is true or absent, this API produces a 2-way three dot diff. This is the diff between source commit and the merge base of the source commit and the destination commit. When the &#x60;topic&#x60; query param is false, a simple git-style diff is produced.  The two commits are interpreted as follows:  * First commit: the commit containing the changes we wish to preview * Second commit: the commit representing the state to which we want to   compare the first commit * **Note**: This is the opposite of the order used in &#x60;git diff&#x60;.  #### Sample output &#x60;&#x60;&#x60; curl https://api.bitbucket.org/2.0/repositories/bitbucket/geordi/diffstat/d222fa2..e174964 {     \&quot;pagelen\&quot;: 500,     \&quot;values\&quot;: [         {             \&quot;type\&quot;: \&quot;diffstat\&quot;,             \&quot;status\&quot;: \&quot;modified\&quot;,             \&quot;lines_removed\&quot;: 1,             \&quot;lines_added\&quot;: 2,             \&quot;old\&quot;: {                 \&quot;path\&quot;: \&quot;setup.py\&quot;,                 \&quot;escaped_path\&quot;: \&quot;setup.py\&quot;,                 \&quot;type\&quot;: \&quot;commit_file\&quot;,                 \&quot;links\&quot;: {                     \&quot;self\&quot;: {                         \&quot;href\&quot;: \&quot;https://api.bitbucket.org/2.0/repositories/bitbucket/geordi/src/e1749643d655d7c7014001a6c0f58abaf42ad850/setup.py\&quot;                     }                 }             },             \&quot;new\&quot;: {                 \&quot;path\&quot;: \&quot;setup.py\&quot;,                 \&quot;escaped_path\&quot;: \&quot;setup.py\&quot;,                 \&quot;type\&quot;: \&quot;commit_file\&quot;,                 \&quot;links\&quot;: {                     \&quot;self\&quot;: {                         \&quot;href\&quot;: \&quot;https://api.bitbucket.org/2.0/repositories/bitbucket/geordi/src/d222fa235229c55dad20b190b0b571adf737d5a6/setup.py\&quot;                     }                 }             }         }     ],     \&quot;page\&quot;: 1,     \&quot;size\&quot;: 1 } &#x60;&#x60;&#x60;
+Produces a response in JSON format with a record for every path modified, including information on the type of the change and the number of lines added and removed.  #### Single commit spec  If the &#x60;spec&#x60; argument to this API is a single commit, the diff is produced against the first parent of the specified commit.  #### Two commit spec  Two commits separated by &#x60;..&#x60; may be provided as the &#x60;spec&#x60;, e.g., &#x60;3a8b42..9ff173&#x60;. When two commits are provided and the &#x60;topic&#x60; query parameter is true, this API produces a 2-way three dot diff. This is the diff between source commit and the merge base of the source commit and the destination commit. When the &#x60;topic&#x60; query param is false, a simple git-style diff is produced.  The two commits are interpreted as follows:  * First commit: the commit containing the changes we wish to preview * Second commit: the commit representing the state to which we want to   compare the first commit * **Note**: This is the opposite of the order used in &#x60;git diff&#x60;.  #### Sample output &#x60;&#x60;&#x60; curl https://api.bitbucket.org/2.0/repositories/bitbucket/geordi/diffstat/d222fa2..e174964 {     \&quot;pagelen\&quot;: 500,     \&quot;values\&quot;: [         {             \&quot;type\&quot;: \&quot;diffstat\&quot;,             \&quot;status\&quot;: \&quot;modified\&quot;,             \&quot;lines_removed\&quot;: 1,             \&quot;lines_added\&quot;: 2,             \&quot;old\&quot;: {                 \&quot;path\&quot;: \&quot;setup.py\&quot;,                 \&quot;escaped_path\&quot;: \&quot;setup.py\&quot;,                 \&quot;type\&quot;: \&quot;commit_file\&quot;,                 \&quot;links\&quot;: {                     \&quot;self\&quot;: {                         \&quot;href\&quot;: \&quot;https://api.bitbucket.org/2.0/repositories/bitbucket/geordi/src/e1749643d655d7c7014001a6c0f58abaf42ad850/setup.py\&quot;                     }                 }             },             \&quot;new\&quot;: {                 \&quot;path\&quot;: \&quot;setup.py\&quot;,                 \&quot;escaped_path\&quot;: \&quot;setup.py\&quot;,                 \&quot;type\&quot;: \&quot;commit_file\&quot;,                 \&quot;links\&quot;: {                     \&quot;self\&quot;: {                         \&quot;href\&quot;: \&quot;https://api.bitbucket.org/2.0/repositories/bitbucket/geordi/src/d222fa235229c55dad20b190b0b571adf737d5a6/setup.py\&quot;                     }                 }             }         }     ],     \&quot;page\&quot;: 1,     \&quot;size\&quot;: 1 } &#x60;&#x60;&#x60;
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param repoSlug This can either be the repository slug or the UUID of the repository, surrounded by curly-braces, for example: &#x60;{repository UUID}&#x60;.
  * @param spec A commit SHA (e.g. &#x60;3a8b42&#x60;) or a commit range using double dot notation (e.g. &#x60;3a8b42..9ff173&#x60;).
  * @param workspace This can either be the workspace ID (slug) or the workspace UUID surrounded by curly-braces, for example: &#x60;{workspace UUID}&#x60;.
  * @param optional nil or *CommitsApiRepositoriesWorkspaceRepoSlugDiffstatSpecGetOpts - Optional Parameters:
      * @param "IgnoreWhitespace" (optional.Bool) -  Generate diffs that ignore whitespace
-     * @param "Merge" (optional.Bool) -  This parameter is deprecated and will be removed at the end of 2022. The &#x27;topic&#x27; parameter should be used instead. The &#x27;merge&#x27; and &#x27;topic&#x27; parameters cannot be both used at the same time.  If true, the source commit is merged into the destination commit, and then a diffstat from the destination to the merge result is returned. If false, a simple &#x27;two dot&#x27; diffstat between the source and destination is returned. True if omitted.
+     * @param "Merge" (optional.Bool) -  This parameter is deprecated. The &#x27;topic&#x27; parameter should be used instead. The &#x27;merge&#x27; and &#x27;topic&#x27; parameters cannot be both used at the same time.  If true, the source commit is merged into the destination commit, and then a diffstat from the destination to the merge result is returned. If false, a simple &#x27;two dot&#x27; diffstat between the source and destination is returned. True if omitted.
      * @param "Path" (optional.String) -  Limit the diffstat to a particular file (this parameter can be repeated for multiple paths).
      * @param "Renames" (optional.Bool) -  Whether to perform rename detection, true if omitted.
      * @param "Topic" (optional.Bool) -  If true, returns 2-way &#x27;three-dot&#x27; diff. This is a diff between the source commit and the merge base of the source commit and the destination commit. If false, a simple &#x27;two dot&#x27; diff between the source and destination is returned.
+     * @param "Page" (optional.Int32) -  page
 @return PaginatedDiffstats
 */
 
@@ -2113,6 +2329,7 @@ type CommitsApiRepositoriesWorkspaceRepoSlugDiffstatSpecGetOpts struct {
 	Path             optional.String
 	Renames          optional.Bool
 	Topic            optional.Bool
+	Page             optional.Int32
 }
 
 func (a *CommitsApiService) RepositoriesWorkspaceRepoSlugDiffstatSpecGet(ctx context.Context, repoSlug string, spec string, workspace string, localVarOptionals *CommitsApiRepositoriesWorkspaceRepoSlugDiffstatSpecGetOpts) (PaginatedDiffstats, *http.Response, error) {
@@ -2148,6 +2365,9 @@ func (a *CommitsApiService) RepositoriesWorkspaceRepoSlugDiffstatSpecGet(ctx con
 	}
 	if localVarOptionals != nil && localVarOptionals.Topic.IsSet() {
 		localVarQueryParams.Add("topic", parameterToString(localVarOptionals.Topic.Value(), ""))
+	}
+	if localVarOptionals != nil && localVarOptionals.Page.IsSet() {
+		localVarQueryParams.Add("page", parameterToString(localVarOptionals.Page.Value(), ""))
 	}
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{}
